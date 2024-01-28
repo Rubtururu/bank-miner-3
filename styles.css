@@ -2,27 +2,39 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f6f7fb;
+  background-color: #f8f9fa;
   color: #333;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   font-size: 36px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
-p {
-  margin-bottom: 10px;
+.account-info {
+  margin-bottom: 20px;
+}
+
+.account-info p {
+  margin: 5px 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 input[type="number"] {
-  width: calc(100% - 22px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -30,34 +42,36 @@ input[type="number"] {
   font-size: 16px;
 }
 
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
 button {
-  width: 100%;
-  padding: 15px;
-  background-color: #2e3a57;
-  color: #fff;
+  flex: 1;
+  padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   transition: background-color 0.3s;
 }
 
+.deposit-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.withdraw-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.claim-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
 button:hover {
-  background-color: #1e2a3e;
-}
-
-.account-info {
-  margin-bottom: 20px;
-}
-
-.account-info span {
-  font-weight: bold;
-  color: #2e3a57;
-}
-
-.results {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  filter: brightness(0.8);
 }
