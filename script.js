@@ -5,7 +5,7 @@ const Web3 = require('web3');
 const web3 = new Web3('https://bsc-dataseed.binance.org/');
 
 // Definir la dirección del contrato MinuBones y su ABI
-const contractAddress = '0x123456789...'; // Reemplazar con la dirección real del contrato
+const contractAddress = '0xA873689AF361B45EB10234D621e118D2F5f61b16'; // Reemplazar con la dirección real del contrato
 const contractAbi = [
     // Definir ABI del contrato aquí
 ];
