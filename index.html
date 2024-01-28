@@ -16,11 +16,13 @@
       <p>Your dividends: <span id="dividends"></span></p>
       <p>Last deposit time: <span id="lastDepositTime"></span></p>
     </div>
-    <div class="results">
+    <div class="form-group">
       <input type="number" id="depositAmount" placeholder="Enter BNB amount">
-      <button onclick="deposit()">Deposit</button>
-      <button onclick="withdraw()">Withdraw</button>
-      <button onclick="claimDividends()">Claim Dividends</button>
+      <div class="button-container">
+        <button class="deposit-button" onclick="deposit()">Deposit</button>
+        <button class="withdraw-button" onclick="withdraw()">Withdraw</button>
+        <button class="claim-button" onclick="claimDividends()">Claim Dividends</button>
+      </div>
     </div>
   </div>
   <script src="script.js"></script>
