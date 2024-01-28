@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MinuBones DApp</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinuBones - Contrato Inteligente</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>MinuBones DApp</h1>
-    <div class="account-info">
-      <p>Your account: <span id="account"></span></p>
-      <p>Your BNB balance: <span id="bnbBalance"></span></p>
-      <p>Your deposited BNB: <span id="depositedBnb"></span></p>
-      <p>Your dividends: <span id="dividends"></span></p>
-      <p>Last deposit time: <span id="lastDepositTime"></span></p>
-    </div>
-    <div class="form-group">
-      <input type="number" id="depositAmount" placeholder="Enter BNB amount">
-      <div class="button-container">
-        <button class="deposit-button" onclick="deposit()">Deposit</button>
-        <button class="withdraw-button" onclick="withdraw()">Withdraw</button>
-        <button class="claim-button" onclick="claimDividends()">Claim Dividends</button>
-      </div>
-<div class="account-info">
-  ...
-  <p>Treasury Pool Balance: <span id="treasuryPoolBalance"></span></p>
-  <p>Dividends Pool Balance: <span id="dividendsPoolBalance"></span></p>
-  <p>Daily Dividends: <span id="dailyDividends"></span></p>
-</div>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <header>
+        <h1>¡Bienvenido a MinuBones!</h1>
+        <img src="logo.png" alt="Logo de MinuBones">
+    </header>
+    <main>
+        <section id="stats">
+            <h2>Estadísticas del Contrato</h2>
+            <div id="treasury-pool">
+                <p>Pool del Tesoro:</p>
+                <span id="treasury-amount">0 BNB</span>
+            </div>
+            <div id="dividends-pool">
+                <p>Pool de Dividendos:</p>
+                <span id="dividends-amount">0 BNB</span>
+            </div>
+            <div id="weekly-prize">
+                <p>Premio Semanal:</p>
+                <span id="weekly-prize-amount">0 BNB</span>
+            </div>
+        </section>
+        <section id="actions">
+            <h2>Acciones</h2>
+            <button id="deposit-btn">Depositar BNB</button>
+            <button id="withdraw-btn">Retirar BNB</button>
+            <button id="claim-dividends-btn">Reclamar Dividendos</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 MinuBones. Todos los derechos reservados.</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
