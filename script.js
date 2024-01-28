@@ -1,70 +1,59 @@
-// Importar Web3.js
-const Web3 = require('web3');
+// Ejemplo de conexión a un contrato inteligente usando Web3.js
+// Esto es solo un ejemplo, asegúrate de configurar correctamente tu entorno de desarrollo y la conexión a tu red blockchain.
 
-// Crear una instancia de Web3 y conectar al proveedor de la red (Binance Smart Chain)
-const web3 = new Web3('https://bsc-dataseed.binance.org/');
+// Conexión a la red blockchain (Ethereum)
+const web3 = new Web3('https://mainnet.infura.io/v3/TU_INFURA_PROJECT_ID');
 
-// Definir la dirección del contrato MinuBones y su ABI
-const contractAddress = '0xA873689AF361B45EB10234D621e118D2F5f61b16'; // Reemplazar con la dirección real del contrato
-const contractAbi = [
-    // Definir ABI del contrato aquí
-];
+// Instancia del contrato inteligente MinuBones
+const contractAddress = '0xA873689AF361B45EB10234D621e118D2F5f61b16';
+const minuBonesContract = new web3.eth.Contract(ABI_DEL_CONTRATO, contractAddress);
 
-// Crear una instancia del contrato MinuBones
-const minuBonesContract = new web3.eth.Contract(contractAbi, contractAddress);
+// Actualizar estadísticas del contrato
+async function updateContractStats() {
+    const treasuryAmount = await minuBonesContract.methods.treasuryPoolBalance().call();
+    const dividendsAmount = await minuBonesContract.methods.dividendsPoolBalance().call();
+    const weeklyPrizeAmount = await minuBonesContract.methods.calculateWeeklyPrize().call();
+    const totalDeposits = await minuBonesContract.methods.totalDeposits().call();
+    const totalUsers = await minuBonesContract.methods.totalUsers().call();
+    const depositRanking = await minuBonesContract.methods.getDepositRanking().call();
 
-// Función para obtener y actualizar los datos del contrato
-async function updateContractData() {
-    try {
-        // Obtener los datos del contrato
-        const treasuryAmount = await minuBonesContract.methods.getTreasuryAmount().call();
-        const dividendsAmount = await minuBonesContract.methods.getDividendsAmount().call();
-        const weeklyPrizeAmount = await minuBonesContract.methods.getWeeklyPrizeAmount().call();
+    document.getElementById('treasury-amount').textContent = treasuryAmount + ' BNB';
+    document.getElementById('dividends-amount').textContent = dividendsAmount + ' BNB';
+    document.getElementById('weekly-prize-amount').textContent = weeklyPrizeAmount + ' BNB';
+    document.getElementById('total-deposits-amount').textContent = totalDeposits + ' BNB';
+    document.getElementById('total-users').textContent = totalUsers;
 
-        // Actualizar las estadísticas en la interfaz
-        document.getElementById('treasury-amount').textContent = web3.utils.fromWei(treasuryAmount, 'ether') + ' BNB';
-        document.getElementById('dividends-amount').textContent = web3.utils.fromWei(dividendsAmount, 'ether') + ' BNB';
-        document.getElementById('weekly-prize-amount').textContent = web3.utils.fromWei(weeklyPrizeAmount, 'ether') + ' BNB';
-    } catch (error) {
-        console.error('Error al obtener los datos del contrato:', error);
-    }
+    const depositRankingList = document.getElementById('deposit-ranking');
+    depositRankingList.innerHTML = '';
+    depositRanking.forEach((user, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${index + 1}. ${user.address} - ${user.amount} BNB`;
+        depositRankingList.appendChild(listItem);
+    });
 }
 
-// Función para manejar el depósito de BNB
-async function handleDeposit() {
-    try {
-        // Lógica para el depósito de BNB
-        // ...
-    } catch (error) {
-        console.error('Error al realizar el depósito:', error);
-    }
-}
+// Función para depositar BNB
+document.getElementById('deposit-btn').addEventListener('click', async () => {
+    const depositAmount = document.getElementById('deposit-amount').value;
+    const accounts = await web3.eth.getAccounts();
+    await minuBonesContract.methods.deposit().send({ value: web3.utils.toWei(depositAmount, 'ether'), from: accounts[0] });
+    await updateContractStats();
+});
 
-// Función para manejar el retiro de BNB
-async function handleWithdraw() {
-    try {
-        // Lógica para el retiro de BNB
-        // ...
-    } catch (error) {
-        console.error('Error al realizar el retiro:', error);
-    }
-}
+// Función para retirar BNB
+document.getElementById('withdraw-btn').addEventListener('click', async () => {
+    const withdrawAmount = document.getElementById('withdraw-amount').value;
+    await minuBonesContract.methods.withdraw(web3.utils.toWei(withdrawAmount, 'ether')).send();
+    await updateContractStats();
+});
 
-// Función para manejar el reclamo de dividendos
-async function handleClaimDividends() {
-    try {
-        // Lógica para reclamar dividendos
-        // ...
-    } catch (error) {
-        console.error('Error al reclamar dividendos:', error);
-    }
-}
+// Función para reclamar dividendos
+document.getElementById('claim-dividends-btn').addEventListener('click', async () => {
+    await minuBonesContract.methods.claimDividends().send();
+    await updateContractStats();
+});
 
-// Llamar a la función de actualización al cargar la página y cada cierto intervalo de tiempo
-updateContractData();
-setInterval(updateContractData, 30000); // Actualizar cada 30 segundos
-
-// Event Listeners para los botones
-document.getElementById('deposit-btn').addEventListener('click', handleDeposit);
-document.getElementById('withdraw-btn').addEventListener('click', handleWithdraw);
-document.getElementById('claim-dividends-btn').addEventListener('click', handleClaimDividends);
+// Cargar estadísticas del contrato al cargar la página
+window.addEventListener('load', async () => {
+    await updateContractStats();
+});
