@@ -1,82 +1,70 @@
-window.addEventListener('load', async () => {
-  // Verifica si MetaMask está instalado y conectado
-  if (typeof window.ethereum !== 'undefined') {
-    window.web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
-  } else {
-    alert('Por favor, instala MetaMask para usar esta aplicación.');
-  }
+// Importar Web3.js
+const Web3 = require('web3');
 
-  // Dirección del contrato y ABI
-  const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Reemplaza con la dirección de tu contrato
-  const contractAbi = [ /* Inserta el ABI de tu contrato aquí */ ];
+// Crear una instancia de Web3 y conectar al proveedor de la red (Binance Smart Chain)
+const web3 = new Web3('https://bsc-dataseed.binance.org/');
 
-  // Inicializa el contrato
-  const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
+// Definir la dirección del contrato MinuBones y su ABI
+const contractAddress = '0x123456789...'; // Reemplazar con la dirección real del contrato
+const contractAbi = [
+    // Definir ABI del contrato aquí
+];
 
-  // Actualiza la interfaz de usuario con la información del usuario
-  async function updateUI() {
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
+// Crear una instancia del contrato MinuBones
+const minuBonesContract = new web3.eth.Contract(contractAbi, contractAddress);
 
-    document.getElementById('account').textContent = account;
+// Función para obtener y actualizar los datos del contrato
+async function updateContractData() {
+    try {
+        // Obtener los datos del contrato
+        const treasuryAmount = await minuBonesContract.methods.getTreasuryAmount().call();
+        const dividendsAmount = await minuBonesContract.methods.getDividendsAmount().call();
+        const weeklyPrizeAmount = await minuBonesContract.methods.getWeeklyPrizeAmount().call();
 
-    const bnbBalance = await web3.eth.getBalance(account);
-    document.getElementById('bnbBalance').textContent = web3.utils.fromWei(bnbBalance, 'ether');
+        // Actualizar las estadísticas en la interfaz
+        document.getElementById('treasury-amount').textContent = web3.utils.fromWei(treasuryAmount, 'ether') + ' BNB';
+        document.getElementById('dividends-amount').textContent = web3.utils.fromWei(dividendsAmount, 'ether') + ' BNB';
+        document.getElementById('weekly-prize-amount').textContent = web3.utils.fromWei(weeklyPrizeAmount, 'ether') + ' BNB';
+    } catch (error) {
+        console.error('Error al obtener los datos del contrato:', error);
+    }
+}
 
-    const depositedBnb = await contractInstance.methods.depositedBnb(account).call();
-    const dividends = await contractInstance.methods.calculateDividends(account).call();
-    const lastDepositTime = await contractInstance.methods.lastDepositTime(account).call();
+// Función para manejar el depósito de BNB
+async function handleDeposit() {
+    try {
+        // Lógica para el depósito de BNB
+        // ...
+    } catch (error) {
+        console.error('Error al realizar el depósito:', error);
+    }
+}
 
-    document.getElementById('depositedBnb').textContent = web3.utils.fromWei(depositedBnb, 'ether');
-    document.getElementById('dividends').textContent = web3.utils.fromWei(dividends, 'ether');
-    document.getElementById('lastDepositTime').textContent = new Date(lastDepositTime * 1000).toLocaleString();
+// Función para manejar el retiro de BNB
+async function handleWithdraw() {
+    try {
+        // Lógica para el retiro de BNB
+        // ...
+    } catch (error) {
+        console.error('Error al realizar el retiro:', error);
+    }
+}
 
-    const treasuryPoolBalance = await contractInstance.methods.getTreasuryPoolBalance().call();
-    const dividendsPoolBalance = await contractInstance.methods.getDividendsPoolBalance().call();
-    const dailyDividends = await contractInstance.methods.calculateDailyDividends(account).call();
+// Función para manejar el reclamo de dividendos
+async function handleClaimDividends() {
+    try {
+        // Lógica para reclamar dividendos
+        // ...
+    } catch (error) {
+        console.error('Error al reclamar dividendos:', error);
+    }
+}
 
-    document.getElementById('treasuryPoolBalance').textContent = web3.utils.fromWei(treasuryPoolBalance, 'ether');
-    document.getElementById('dividendsPoolBalance').textContent = web3.utils.fromWei(dividendsPoolBalance, 'ether');
-    document.getElementById('dailyDividends').textContent = web3.utils.fromWei(dailyDividends, 'ether');
-  }
+// Llamar a la función de actualización al cargar la página y cada cierto intervalo de tiempo
+updateContractData();
+setInterval(updateContractData, 30000); // Actualizar cada 30 segundos
 
-  // Depositar BNB
-  async function deposit() {
-    const depositAmount = document.getElementById('depositAmount').value;
-    if (!depositAmount) return;
-
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
-
-    await contractInstance.methods.deposit().send({
-      from: account,
-      value: web3.utils.toWei(depositAmount, 'ether')
-    });
-
-    updateUI();
-  }
-
-  // Retirar BNB
-  async function withdraw() {
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
-
-    await contractInstance.methods.withdraw().send({ from: account });
-
-    updateUI();
-  }
-
-  // Reclamar dividendos
-  async function claimDividends() {
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
-
-    await contractInstance.methods.claimDividends().send({ from: account });
-
-    updateUI();
-  }
-
-  // Inicializar la interfaz de usuario
-  updateUI();
-});
+// Event Listeners para los botones
+document.getElementById('deposit-btn').addEventListener('click', handleDeposit);
+document.getElementById('withdraw-btn').addEventListener('click', handleWithdraw);
+document.getElementById('claim-dividends-btn').addEventListener('click', handleClaimDividends);
