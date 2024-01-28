@@ -59,6 +59,22 @@ h2 {
     text-align: center;
 }
 
+#actions .action {
+    margin-bottom: 10px;
+}
+
+#actions label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#actions input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 #actions button {
     padding: 10px 20px;
     font-size: 18px;
