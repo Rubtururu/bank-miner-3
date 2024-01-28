@@ -31,6 +31,14 @@ window.addEventListener('load', async () => {
     document.getElementById('depositedBnb').textContent = web3.utils.fromWei(depositedBnb, 'ether');
     document.getElementById('dividends').textContent = web3.utils.fromWei(dividends, 'ether');
     document.getElementById('lastDepositTime').textContent = new Date(lastDepositTime * 1000).toLocaleString();
+
+    const treasuryPoolBalance = await contractInstance.methods.getTreasuryPoolBalance().call();
+    const dividendsPoolBalance = await contractInstance.methods.getDividendsPoolBalance().call();
+    const dailyDividends = await contractInstance.methods.calculateDailyDividends(account).call();
+
+    document.getElementById('treasuryPoolBalance').textContent = web3.utils.fromWei(treasuryPoolBalance, 'ether');
+    document.getElementById('dividendsPoolBalance').textContent = web3.utils.fromWei(dividendsPoolBalance, 'ether');
+    document.getElementById('dailyDividends').textContent = web3.utils.fromWei(dailyDividends, 'ether');
   }
 
   // Depositar BNB
